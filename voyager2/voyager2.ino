@@ -20,9 +20,9 @@
 char* ssid      = "Tufts Secure";
 char* password  = "notallpeople";
 
-#define DISPLAY_ADDRESS_1   0x70
+#define DISPLAY_ADDRESS_1   0x72
 #define DISPLAY_ADDRESS_2   0x71
-#define DISPLAY_ADDRESS_3   0x72
+#define DISPLAY_ADDRESS_3   0x70
 
 #define USE_SERIAL Serial
 
@@ -45,18 +45,6 @@ void setup() {
   // Initialize WIFI Manager 
   WiFiManager wifiManager;
   wifiManager.autoConnect("AP-NAME", "AP-PASSWORD");
-
-  //WiFi.begin(ssid, password);
-
-  //while (WiFi.status() != WL_CONNECTED) {
-  //  delay(500);
-  //  Serial.print(".");
-  // }
-
-  // Serial.println("");
-  // Serial.println("WiFi connected");
-  // Serial.println("IP address: ");
-  // Serial.println(WiFi.localIP());
 
 }
 
@@ -99,10 +87,8 @@ void loop() {
 
       // Print the value to each display, not written yet
       voyagerDisplay1.print(d1.toInt(), DEC);
-      //voyagerDisplay2.print(d2.toInt(), DEC);
-      //voyagerDisplay3.print(d3.toInt(), DEC);
 
-      // Only pad the second and third displays 
+      // Only pad the second and third displays with zeros 
       padDisplayWithZeros(d2, &voyagerDisplay2);
       padDisplayWithZeros(d3, &voyagerDisplay3);
       
@@ -119,7 +105,6 @@ void loop() {
   }
 
   http.end();
-
   delay(1000);
 }
 
@@ -143,6 +128,8 @@ void padDisplayWithZeros(String segmentData, Adafruit_7segment * segmentDisplay)
   else if (val < 10) {
       segmentDisplay->writeDigitNum(0, 0);
       segmentDisplay->writeDigitNum(1, 0);
+
+      // We skip 2 since that is the ":" 
       segmentDisplay->writeDigitNum(3, 0);
       segmentDisplay->writeDigitNum(4, String(segmentData[3]).toInt());
 
@@ -152,6 +139,8 @@ void padDisplayWithZeros(String segmentData, Adafruit_7segment * segmentDisplay)
   else if (val < 100) {
       segmentDisplay->writeDigitNum(0, 0);
       segmentDisplay->writeDigitNum(1, 0);
+
+      // We skip 2 since that is the ":" 
       segmentDisplay->writeDigitNum(3, String(segmentData[2]).toInt());
       segmentDisplay->writeDigitNum(4, String(segmentData[3]).toInt());
   }
@@ -159,6 +148,8 @@ void padDisplayWithZeros(String segmentData, Adafruit_7segment * segmentDisplay)
   else if (val < 1000) {
       segmentDisplay->writeDigitNum(0, 0);
       segmentDisplay->writeDigitNum(1, String(segmentData[1]).toInt());
+
+      // We skip 2 since that is the ":" 
       segmentDisplay->writeDigitNum(3, String(segmentData[2]).toInt());
       segmentDisplay->writeDigitNum(4, String(segmentData[3]).toInt());
   }
